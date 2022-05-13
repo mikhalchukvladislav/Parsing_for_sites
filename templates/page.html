@@ -1,0 +1,131 @@
+{% extends 'default.html' %}
+{% load static %}
+
+{% block content %}
+<h1> Результат парсинга со страницы: {{ url }} </h1>
+<hr>
+<form method="GET">
+    
+    <a>
+    <label for="domain">Domain</label>  
+    {{ filter.form.domain }}
+
+    <label for="create_date">Create date</label>    
+    {{ filter.form.create_date }}
+
+    <label for="update_date">Update date</label>    
+    {{ filter.form.update_date }}
+    
+    <label for="url"></label>
+    <select id='url' name="url">
+        <option value="">URL</option>
+        {% for obj in url_list %}
+            <option value="{{ obj }}">
+                {{ obj }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <label for="country"></label>
+    <select id='country' name="country">
+        <option value="">Country</option>
+        {% for obj in country_list %}
+            <option value="{{ obj }}">
+                {{ obj }}
+            </option>
+        {% endfor %}
+    </select>
+    </a>
+    
+    <input type="submit" value="Найти">
+</form>
+<div class="row">
+    <table>
+            <tr>
+                <td>
+                    Domain
+                </td>
+                <td>
+                    Create date
+                </td>
+                <td>
+                    Update_date
+                </td>
+                <td>
+                    Country
+                </td>
+                <td>
+                    Is dead
+                </td>
+                <td>
+                    A
+                </td>
+                <td>
+                    NS
+                </td>
+                <td>
+                    CNAME
+                </td>
+                <td>
+                    MX
+                </td>
+                <td>
+                    txt
+                </td>
+            </tr>
+            {% for row in qs %}
+            <tr>
+                <td>
+                    {{ row.domain }}
+                </td>
+                <td>
+                    {{ row.create_date |date:'M d Y' }}
+                </td>
+                <td>
+                    {{ row.update_date |date:'M d Y' }}
+                </td>
+                <td>
+                    {{ row.country }}
+                </td>
+                <td>
+                    {{ row.is_dead }}
+                </td>
+                <td>
+                    {{ row.a }}
+                </td>
+                <td>
+                    {{ row.ns }}
+                </td>
+                <td>
+                    {{ row.cname }}
+                </td>
+                <td>
+                    {{ row.mx }}
+                </td>
+                <td>
+                    {{ row.txt }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+</div>
+
+{% if page_obj.has_previous %}
+    <a href="?page=1">First</a>
+    <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+        <a>{{ num }}</a>
+    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">>>></a>
+    <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
+
+{% endblock content %}

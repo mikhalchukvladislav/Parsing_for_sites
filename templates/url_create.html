@@ -1,0 +1,13 @@
+{% extends 'default.html' %}
+{% block title %}
+Parse website
+{% endblock title %}
+
+{% block content %}
+<h3>Enter the link you'd like to parse</h3>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Scrab the link">
+</form>
+{% endblock content %}
